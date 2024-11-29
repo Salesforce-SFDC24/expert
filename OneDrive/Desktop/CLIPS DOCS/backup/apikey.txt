@@ -1,0 +1,13 @@
+googlesheet@prefab-setting-442807-f5.iam.gserviceaccount.com
+
+
+Unique ID
+
+113619764935582400110
+
+https://docs.google.com/spreadsheets/create?show_add_on=M2HpANxv68Xd1WdCyf7uO4RpgNu2sSabr
+
+
+key
+
+ace9c439aca5d0e8844661902df02c1b0d9710fc
