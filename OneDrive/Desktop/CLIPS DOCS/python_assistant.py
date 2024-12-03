@@ -1,66 +1,83 @@
+
+
 import openai
 import json
 import os
 
-# OpenAI API key (replace with your actual key)
+# Replace with your actual OpenAI API key
 openai.api_key = "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"
-# Session context for maintaining conversation history
-session_context = []
 
-# File to save logs
+# Log file for saving conversation history
 LOG_FILE = "assistant_logs.json"
 
-def save_logs():
-    """Save session context to a log file."""
-    with open(LOG_FILE, "w") as log_file:
-        json.dump(session_context, log_file, indent=4)
-
-def load_logs():
-    """Load session context from a log file."""
-    global session_context
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "r") as log_file:
-            session_context = json.load(log_file)
-
-def gpt4_response(query):
+def get_gpt_response(user_input):
     """
-    Sends a query to OpenAI GPT-4 and returns the response.
+    Get a response from GPT-4 for the given user input.
     """
     try:
-        # Add user query to the session context
-        session_context.append({"role": "user", "content": query})
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
-            messages=session_context
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": user_input}
+            ]
         )
-        # Extract response and append to session context
-        assistant_response = response['choices'][0]['message']['content']
-        session_context.append({"role": "assistant", "content": assistant_response})
-        return assistant_response
+        return response['choices'][0]['message']['content']
     except Exception as e:
-        return f"Error with GPT-4 API: {e}"
+        return f"Error with GPT-4 API: {str(e)}"
 
-def run_assistant_with_gpt():
+def save_logs(conversation_log):
     """
-    A command-line interface for interacting with the assistant.
+    Save the conversation log to a file.
+    """
+    try:
+        with open(LOG_FILE, "w") as f:
+            json.dump(conversation_log, f, indent=4)
+        print("Logs saved successfully.")
+    except Exception as e:
+        print(f"Error saving logs: {str(e)}")
+
+def load_logs():
+    """
+    Load conversation logs from a file.
+    """
+    try:
+        if os.path.exists(LOG_FILE):
+            with open(LOG_FILE, "r") as f:
+                return json.load(f)
+        else:
+            print("No logs found. Starting fresh.")
+            return []
+    except Exception as e:
+        print(f"Error loading logs: {str(e)}")
+        return []
+
+def main():
+    """
+    Main function to run the assistant.
     """
     print("Welcome to your GPT-4 Assistant! Type 'exit' to quit.")
     print("Type 'save' to save logs or 'load' to load logs.")
+
+    conversation_log = []
+
     while True:
         user_input = input("You: ")
+        
         if user_input.lower() == "exit":
-            print("Assistant: Goodbye!")
+            print("Goodbye!")
             break
         elif user_input.lower() == "save":
-            save_logs()
-            print("Assistant: Logs saved successfully.")
-            continue
+            save_logs(conversation_log)
         elif user_input.lower() == "load":
-            load_logs()
-            print("Assistant: Logs loaded successfully.")
-            continue
-        response = gpt4_response(user_input)
-        print(f"Assistant: {response}")
+            conversation_log = load_logs()
+            print("Logs loaded.")
+        else:
+            assistant_response = get_gpt_response(user_input)
+            print(f"Assistant: {assistant_response}")
+
+            # Save the interaction in the log
+            conversation_log.append({"user": user_input, "assistant": assistant_response})
 
 if __name__ == "__main__":
-    run_assistant_with_gpt()
+    main()
