@@ -12,6 +12,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
   pool:
     name: 'pool1'
-
-
-
+    region: 'us-east1'
+    machineType: 'e2-medium'
+    diskSizeGb: 100
+    network: 'default'
