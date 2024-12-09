@@ -12,6 +12,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
   pool:
     name: 'pool1'
-    region: 'us-east1'
+
 
 
