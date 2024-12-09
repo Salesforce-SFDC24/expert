@@ -15,4 +15,4 @@ options:
     region: 'us-east1'
     machineType: 'e2-medium'
     diskSize: '100GB'
-    network: 'default'
+
