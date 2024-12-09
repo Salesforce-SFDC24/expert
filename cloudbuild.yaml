@@ -10,4 +10,9 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
+  pool:
+    name: 'pool1'
+    region: 'us-east1'
+    machineType: 'e2-medium'
+    diskSize: '100GB'
+    network: 'default'
