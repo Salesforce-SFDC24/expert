@@ -13,6 +13,5 @@ options:
   pool:
     name: 'pool1'
     region: 'us-east1'
-    machineType: 'e2-medium'
-    diskSize: '100GB'
+
 
